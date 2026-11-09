@@ -229,7 +229,7 @@ This project uses CSS Grid as the primary layout system.
     grid-template-rows: repeat(2, minmax(0, 1fr));
     width: min(800px, 90vw, 160vh);
     height: min(450px, 80vh);
-    background-color: none;
+    background-color: transparent;
     gap: 5px;
     aspect-ratio: 5 / 2;
     position: relative;
