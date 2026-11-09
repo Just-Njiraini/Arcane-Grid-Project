@@ -1,0 +1,130 @@
+
+.container{
+    display: grid;/* Turns the container into a CSS Grid layout, allowing us to arrange the child elements (our images) into rows and columns.*/
+    grid-template-columns: repeat(5, minmax(0, 1fr));/* Creates 5 equal-width columns. minmax(0, 1fr) allows each column to shrink to 0 if necessary while distributing the available space equally among all columns making our grid responsive. */ 
+    grid-template-rows: repeat(2, minmax(0, 1fr));  /* Creates 2 equal-height rows. Each row can shrink when necessary while sharing the available vertical space equally. */
+    width: min(800px, 90vw, 160vh); /* Sets the container width to whichever is smallest: 800px, 90% of the viewport width, or 160% of the viewport height. This helps prevent the grid from becoming excessively wide. */
+    height: min(450px, 80vh);  /* Sets the container height to whichever is smaller: 450px or 80% of the viewport height. This makes the grid adapt to different screen heights. */
+    background-color: transparent;  /* Makes the container background transparent, allowing our video to remain visible. */
+    gap: 5px; /* Adds a 5px gap between our grid items, both horizontally and vertically. */
+    aspect-ratio: 5 / 2; /* Maintains a width-to-height ratio of 5:2. This helps preserve the grid's proportions as its dimensions change. */
+   /* position: relative; */
+    z-index: 1; /* Places the container at stacking level 1, helping control our grid to appear in front of our video. */
+}
+
+.page {
+    min-height: 100vh; /* Ensures the page is at least as tall as the browser viewport. 100vh represents 100% of the viewport height. Using min-height rather than height allows the page to grow if its content exceeds the viewport height. */
+    display: grid; /* Turns the page into a CSS Grid container. This allows us to use CSS Grid properties to position and align its child elements. */
+    place-items: center; /* Centers the child elements both horizontally and vertically. It is shorthand for: align-items: center; justify-items: center; */
+    overflow: hidden; /* Prevents content extending beyond the page boundaries from creating visible overflow or scrollbars. */
+    position: relative; /* Establishes a positioning reference for absolutely positioned child elements. This is particularly useful when layering background videos, overlays, and other elements within the page. */
+}
+
+.page::before {
+    content: ""; /* Creates a pseudo-element before the actual content of .page. An empty string is used because we want a visual overlay, not additional text or content. */
+    position: absolute; /* Removes the pseudo-element from the normal document flow and allows us to position it relative to its nearest positioned ancestor, which is .page. */
+    inset: 0; /* Sets the distance from all four edges to zero.
+       This is shorthand for:
+       top: 0;
+       right: 0;
+       bottom: 0;
+       left: 0;
+       This makes the overlay cover the entire .page element. */
+    background: rgba(0, 0, 0, 0.45); /* Applies a semi-transparent black background. The 0.45 represents 45% opacity, allowing the background video or image to remain partially visible underneath. */
+    z-index: 1;  /* Controls the stacking order of the overlay.
+       Places it at stacking level 1 so it can sit above the
+       background while remaining behind elements with a higher
+       stacking level in the same stacking context. */
+    pointer-events: none; /* Prevents the overlay from intercepting mouse interactions.
+       This allows users to click, hover over, and interact with
+       elements underneath the overlay. */
+}
+
+
+/*The .layer class ensures that grid items can shrink below their default minimum content size, preventing them from stretching or disrupting the grid layout. overflow: hidden clips any content that extends beyond the boundaries of each layer, keeping the layout clean and contained*/
+.layer{
+    min-width: 0;
+    min-height: 0;
+    overflow: hidden;
+}
+
+/*The .background-video class positions the video absolutely so that it fills its parent container entirely, using inset: 0, width: 100%, and height: 100%. The object-fit: cover property ensures the video covers the available space without distorting its proportions, while z-index: 0 places it behind the other page elements.*/
+.background-video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 0;
+}
+
+
+.cover-image{
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Scales the image to fill its container without distorting its proportions. Any excess image area is cropped. */
+    display: block;  /* Changes the image from an inline element to a block-level element. This removes the small default space that can appear beneath inline images. */
+    opacity: 0.9; /* Sets the image transparency to 90%, allowing a small amount of the background video underneath it to show through. */
+    transition: opacity 0.4s ease; /* Creates a smooth 0.4-second transition whenever the opacity changes. The ease timing function makes the transition start and finish gradually. */
+    filter: brightness(0.85) saturate(0.85);  /* Reduces image brightness to 85% and colour saturation to 85%. This creates a slightly darker, less vibrant appearance so it blends with the background video */
+}
+
+.cover-image:hover{
+    opacity: 1;
+    filter: brightness(1) saturate(1);
+}
+/*The image will gradually transition from 90% opacity to fully opaque when someone hovers over it.*/
+
+/*my image with the class of .nine occupies 3 columns*/
+.nine{
+    grid-column-start: span 3;
+    order: 7;
+}
+
+/*setting the 0rder to -1 ensured that this maintains its position as the first image on my grid.
+You can also use grid-area: 1 / 5 / 3 / 6  to achieve the same result. */
+.eight{
+    order: -1;
+    grid-row-start: 1;
+    grid-row-end: 3;
+    grid-column-start: 5;
+    grid-column-end: 6;
+}
+
+.seven {
+    order: 7;
+}
+
+.six {
+    order: 6;
+}
+
+.five {
+    order: 5;
+}
+
+.four {
+    order: 4;
+}
+
+.three {
+    order: 3;
+}
+
+.two {
+    order: 2;
+}
+
+/*my image occupies 2 columns*/
+.one {
+    order: 1;
+    grid-column-start: span 2;
+}
+
+ /* Removes the browser's default margin around the body element.
+       This allows your page content to extend fully to the edges
+       of the viewport without unwanted white space. */
+body {
+    margin: 0;
+}
+/*Why it matters: Browsers apply a default margin (usually 8px) to the body. Setting it to 0 gives you full control over your page layout and prevents unwanted gaps around your background video and CSS Grid.*/
